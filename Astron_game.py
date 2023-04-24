@@ -7,16 +7,16 @@ screenRes =(1152,648)
 screen = pygame.display.set_mode(screenRes, 0 ,32)
 
 def menu():
-    icone_sem_som = pygame.image.load('icon_sem_som.png').convert_alpha()
+    icone_sem_som = pygame.image.load('musica_off_normal.png').convert_alpha()
     icone_sem_som = pygame.transform.scale(icone_sem_som, (40,60))
-    icone_com_som = pygame.image.load('icon_com_som.png').convert_alpha()
+    icone_com_som = pygame.image.load('musica_on_normal.png').convert_alpha()
     icone_com_som = pygame.transform.scale(icone_com_som, (80,60))
     icone_som = icone_com_som
-    icon_Iniciar = pygame.image.load('icon_Iniciar.png').convert_alpha()
+    icon_Iniciar = pygame.image.load('iniciar_normal.png').convert_alpha()
     icon_Iniciar = pygame.transform.scale(icon_Iniciar, (150,50))
-    icon_Logo = pygame.image.load('icon_Logo.png').convert_alpha()
+    icon_Logo = pygame.image.load('Logo_Astron.png').convert_alpha()
     icon_Logo = pygame.transform.scale(icon_Logo, (400,100))
-    icon_sair = pygame.image.load('icon_sair.png').convert_alpha()
+    icon_sair = pygame.image.load('sair_normal.png').convert_alpha()
     icon_sair = pygame.transform.scale(icon_sair, (100,50))
 
     intro = True
