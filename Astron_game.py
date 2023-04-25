@@ -6,18 +6,20 @@ pygame.init()
 screenRes =(1152,648)
 screen = pygame.display.set_mode(screenRes, 0 ,32)
 
+
+    
 def menu():
-    icone_sem_som = pygame.image.load('musica_off_normal.png').convert_alpha()
-    icone_sem_som = pygame.transform.scale(icone_sem_som, (40,60))
-    icone_com_som = pygame.image.load('musica_on_normal.png').convert_alpha()
-    icone_com_som = pygame.transform.scale(icone_com_som, (80,60))
+    icone_sem_som = pygame.image.load('musica_off_onhover.png').convert_alpha()
+    icone_sem_som = pygame.transform.scale(icone_sem_som, (74,54))
+    icone_com_som = pygame.image.load('musica_on_onhover.png').convert_alpha()
+    icone_com_som = pygame.transform.scale(icone_com_som, (74,54))
     icone_som = icone_com_som
     icon_Iniciar = pygame.image.load('iniciar_normal.png').convert_alpha()
-    icon_Iniciar = pygame.transform.scale(icon_Iniciar, (150,50))
+    icon_Iniciar = pygame.transform.scale(icon_Iniciar, (168,66))
     icon_Logo = pygame.image.load('Logo_Astron.png').convert_alpha()
-    icon_Logo = pygame.transform.scale(icon_Logo, (400,100))
+    icon_Logo = pygame.transform.scale(icon_Logo, (384,96))
     icon_sair = pygame.image.load('sair_normal.png').convert_alpha()
-    icon_sair = pygame.transform.scale(icon_sair, (100,50))
+    icon_sair = pygame.transform.scale(icon_sair, (102,66))
 
     intro = True
 
@@ -77,6 +79,8 @@ def game():
             screen.fill((255,255,255))
             pygame.draw.rect(screen,(255,255,0),(90,90,100,100))
             
+            pygame.mixer.music.load('04 Hopeful Feeling.mp3')
+            pygame.mixer.music.play()
             pos = pygame.mouse.get_pos()
             if pos[0] >= 90 and pos[0] <= 190 and pos[1] >= 90 and pos[1] <= 190:
                pygame.draw.rect(screen,(0,255,0),(90,90,100,100))
