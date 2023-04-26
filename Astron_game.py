@@ -31,7 +31,9 @@ def menu():
                 quit()
                 
             q1=pygame.draw.rect(screen,(255,255,0),(40,40,100,100))
-            
+            pygame.draw.rect(screen,(255,255,0),(1000,550,74,54))
+            pygame.draw.rect(screen,(255,255,0),(screenRes[0]/2-75,screenRes[1]/2,168,68))
+            pygame.draw.rect(screen,(255,255,0),(screenRes[0]/2-50,screenRes[1]/2+100,102,66))
             pos = pygame.mouse.get_pos()
 
             if pos[0] >= 40 and pos[0] <= 140 and pos[1] >= 40 and pos[1] <= 140:
@@ -41,7 +43,7 @@ def menu():
                     game()
             
             if event.type == pygame.MOUSEBUTTONDOWN: 
-                if pos[0] >= 1000 and pos[0] <= 1040 and pos[1] >= 550 and pos[1] <= 610:
+                if pos[0] >= 1000 and pos[0] <= 1074 and pos[1] >= 550 and pos[1] <= 604:
                     if icone_som == icone_com_som:
                         icone_som = icone_sem_som
                     elif icone_som == icone_sem_som:   
@@ -49,17 +51,13 @@ def menu():
             
             if event.type == pygame.MOUSEBUTTONDOWN: 
                 if pos[0] >= screenRes[0]/2-75 and pos[0] <= screenRes[0]/2+75 and pos[1] >= screenRes[1]/2 and pos[1] <= screenRes[1]/2+50:
-                    pygame.draw.rect(screen,(0,255,255),(40,40,100,100))
-            if event.type == pygame.MOUSEBUTTONDOWN: 
-                if pos[0] >= screenRes[0]/2-75 and pos[0] <= screenRes[0]/2+75 and pos[1] >= screenRes[1]/2 and pos[1] <= screenRes[1]/2+50:
                     game()
-            
+                    
             if event.type == pygame.MOUSEBUTTONDOWN: 
-                if pos[0] >= screenRes[0]/2-50 and pos[0] <= screenRes[0]/2+50 and pos[1] >= screenRes[1]/2 and pos[1] <= screenRes[1]/2+50:
-                    pygame.draw.rect(screen,(0,255,255),(40,40,100,100))
-            if event.type == pygame.MOUSEBUTTONDOWN: 
-                if pos[0] >= screenRes[0]/2-75 and pos[0] <= screenRes[0]/2+75 and pos[1] >= screenRes[1]/2 and pos[1] <= screenRes[1]/2+50:
+                if pos[0] >= screenRes[0]/2-50 and pos[0] <= screenRes[0]/2+50 and pos[1] >= screenRes[1]/2+100 and pos[1] <= screenRes[1]/2+150:
+                    intro = False
                     pygame.quit()
+                    quit()
             
             screen.blit(icone_som,(1000,550))
             screen.blit(icon_Logo,(screenRes[0]/2-200,screenRes[1]/2-200))
