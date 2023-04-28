@@ -53,8 +53,7 @@ music = True
 
 def menu():
 
-    pygame.mixer.music.load('AstronGame-main\musicas\musicamenu.mp3')
-    pygame.mixer.music.play()
+    
     music = True
 
     icone_som = icone_com_som_n
@@ -142,8 +141,9 @@ def menu():
 
 def controles():
     
-    intro = True
-    while intro:
+    control = True
+
+    while control:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -176,7 +176,9 @@ def game():
 
             if pos[0] >= 40 and pos[0] <= 40+icon_voltar.get_width() and pos[1] >= 40 and pos[1] <= icon_voltar.get_height()+40:
                 icon_voltar = icon_voltar_oh
-                if event.type == pygame.MOUSEBUTTONDOWN: 
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pygame.mixer.music.load('AstronGame-main\musicas\musicamenu.mp3')
+                    pygame.mixer.music.play() 
                     menu()
             else:
                 icon_voltar = icon_voltar_n
@@ -184,4 +186,6 @@ def game():
             screen.blit(icon_voltar,(40,40))
             pygame.display.update()
 
+pygame.mixer.music.load('AstronGame-main\musicas\musicamenu.mp3')
+pygame.mixer.music.play()
 menu()
