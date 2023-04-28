@@ -9,27 +9,62 @@ screen = pygame.display.set_mode(screenRes, 0 ,32)
 # Icones Menu
 instrucoes = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\card_instrucoes.png').convert_alpha()
 instrucoes = pygame.transform.scale(instrucoes, (1300,900))
+
 background = pygame.transform.scale(pygame.image.load("AstronGame-main\Sprites\Icon_Menu\Background_logo.png"), screenRes)
-icone_sem_som = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\musica_off_normal.png').convert_alpha()
-icone_sem_som = pygame.transform.scale(icone_sem_som, (74,54))
-icone_com_som = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\musica_on_onhover.png').convert_alpha()
-icone_com_som = pygame.transform.scale(icone_com_som, (74,54))
-icone_Instrucoes = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\Instruções_normal.png').convert_alpha()
-icone_Instrucoes = pygame.transform.scale(icone_Instrucoes, (294,78))
-icon_Iniciar = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\iniciar_normal.png').convert_alpha()
-icon_Iniciar = pygame.transform.scale(icon_Iniciar, (168,66))
-icon_sair = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\sair_normal.png').convert_alpha()
-icon_sair = pygame.transform.scale(icon_sair, (102,66))
+
+icone_sem_som_n = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\musica_off_normal.png').convert_alpha()
+icone_sem_som_n = pygame.transform.scale(icone_sem_som_n, (74,54))
+icone_com_som_n = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\musica_on_normal.png').convert_alpha()
+icone_com_som_n = pygame.transform.scale(icone_com_som_n, (74,54))
+icone_sem_som_oh = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\musica_off_onhover.png').convert_alpha()
+icone_sem_som_oh = pygame.transform.scale(icone_sem_som_oh, (74,54))
+icone_com_som_oh = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\musica_on_onhover.png').convert_alpha()
+icone_com_som_oh = pygame.transform.scale(icone_com_som_oh, (74,54))
+
+icone_Instrucoes_n = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\Instruções_normal.png').convert_alpha()
+icone_Instrucoes_n = pygame.transform.scale(icone_Instrucoes_n, (294,78))
+icone_Instrucoes_oh = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\Instruções_onhover.png').convert_alpha()
+icone_Instrucoes_oh = pygame.transform.scale(icone_Instrucoes_oh, (294,78))
+
+icon_Iniciar_n = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\iniciar_normal.png').convert_alpha()
+icon_Iniciar_n = pygame.transform.scale(icon_Iniciar_n, (168,66))
+icon_Iniciar_oh = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\iniciar_onhover.png').convert_alpha()
+icon_Iniciar_oh = pygame.transform.scale(icon_Iniciar_oh, (168,66))
+
+icon_sair_n = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\sair_normal.png').convert_alpha()
+icon_sair_n = pygame.transform.scale(icon_sair_n, (102,66))
+icon_sair_oh = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\sair_onhover.png').convert_alpha()
+icon_sair_oh = pygame.transform.scale(icon_sair_oh, (102,66))
+
+icon_rank_n = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\Rank_normal.png').convert_alpha()
+icon_rank_n = pygame.transform.scale(icon_rank_n, (160,54))
+icon_rank_oh = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\Rank_onhover.png').convert_alpha()
+icon_rank_oh = pygame.transform.scale(icon_rank_oh, (160,54))
+
+icon_voltar_n = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\Voltar_normal.png').convert_alpha()
+icon_voltar_n = pygame.transform.scale(icon_voltar_n, (60,40))
+icon_voltar_oh = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\Voltar_onhover.png').convert_alpha()
+icon_voltar_oh = pygame.transform.scale(icon_voltar_oh, (60,40))
 
 # Musica
-musica_menu = pygame.mixer.music.load('AstronGame-main\musicas\musicamenu.mp3')
+pygame.mixer.music.load('AstronGame-main\musicas\musicamenu.mp3')
 pygame.mixer.music.play()
+music = True
 
 def menu():
+
     pygame.mixer.music.load('AstronGame-main\musicas\musicamenu.mp3')
     pygame.mixer.music.play()
-    icone_som = icone_com_som
+    music = True
+
+    icone_som = icone_com_som_n
+    icon_rank = icon_rank_n
+    icon_Iniciar = icon_Iniciar_n
+    icone_Instrucoes = icone_Instrucoes_n
+    icon_sair = icon_sair_n
+
     intro = True
+
     while intro:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -39,34 +74,66 @@ def menu():
             pos = pygame.mouse.get_pos()
 
             #Som
-            if event.type == pygame.MOUSEBUTTONDOWN: 
-                if pos[0] >= 1000 and pos[0] <= 1074 and pos[1] >= 550 and pos[1] <= 604:  
-                    if icone_som == icone_com_som:
-                        icone_som = icone_sem_som
+            if pos[0] >= 1000 and pos[0] <= 1074 and pos[1] >= 550 and pos[1] <= 604:
+                if music == True:
+                    icone_som = icone_com_som_oh
+                elif music == False:   
+                    icone_som = icone_sem_som_oh
+                if event.type == pygame.MOUSEBUTTONDOWN:   
+                    if music == True:
+                        icone_som = icone_sem_som_oh
                         pygame.mixer.music.stop() 
-                    elif icone_som == icone_sem_som:   
-                        icone_som = icone_com_som 
-                        pygame.mixer.music.play()   
-
-            # Iniciar
-            if event.type == pygame.MOUSEBUTTONDOWN: 
-                if pos[0] >= 74 and pos[0] <= 74+icon_Iniciar.get_width() and pos[1] >= 235 and pos[1] <= icon_Iniciar.get_height()+235:
-                    game()
-
-            # Instruções
-            if event.type == pygame.MOUSEBUTTONDOWN: 
-                if pos[0] >= 74 and pos[0] <= 74+icone_Instrucoes.get_width() and pos[1] >= 315 and pos[1] <= icone_Instrucoes.get_height()+315:
-                  controles()  
-
-            # Sair
-            if event.type == pygame.MOUSEBUTTONDOWN: 
-                if pos[0] >= 74 and pos[0] <= 74+icon_sair.get_width() and pos[1] >= 395 and pos[1] <= icon_sair.get_height()+395:
+                        music = False
+                    elif music == False:   
+                        icone_som = icone_com_som_oh 
+                        pygame.mixer.music.play() 
+                        music = True 
+            else:
+                if music == True:
+                    icone_som = icone_com_som_n
+                elif music == False:   
+                    icone_som = icone_sem_som_n 
+                     
+            
+            # Rank 
+            if pos[0] >= 830 and pos[0] <= 830+icon_rank_oh.get_width() and pos[1] >= 550 and pos[1] <= icon_rank_oh.get_height()+550:
+                icon_rank = icon_rank_oh
+                if event.type == pygame.MOUSEBUTTONDOWN:       
                     intro = False
                     pygame.quit()
                     quit()
+            else:
+                icon_rank = icon_rank_n
+
+            # Iniciar
+            if pos[0] >= 74 and pos[0] <= 74+icon_Iniciar.get_width() and pos[1] >= 235 and pos[1] <= icon_Iniciar.get_height()+235:
+                icon_Iniciar = icon_Iniciar_oh
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    game()  
+            else:
+                icon_Iniciar = icon_Iniciar_n
+
+            # Instruções
+            if pos[0] >= 74 and pos[0] <= 74+icone_Instrucoes.get_width() and pos[1] >= 315 and pos[1] <= icone_Instrucoes.get_height()+315:
+                icone_Instrucoes = icone_Instrucoes_oh
+                if event.type == pygame.MOUSEBUTTONDOWN: 
+                  controles() 
+            else:
+                icone_Instrucoes = icone_Instrucoes_n 
+
+            # Sair 
+            if pos[0] >= 74 and pos[0] <= 74+icon_sair.get_width() and pos[1] >= 395 and pos[1] <= icon_sair.get_height()+395:
+                icon_sair = icon_sair_oh
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    intro = False
+                    pygame.quit()
+                    quit()
+            else:
+                icon_sair = icon_sair_n
              
             screen.blit(background, (0, 0))
             screen.blit(icone_som,(1000,550))
+            screen.blit(icon_rank,(830,550))
             screen.blit(icon_Iniciar,(screenRes[0]/2-500,screenRes[1]/2-90))
             screen.blit(icon_sair,(screenRes[0]/2-500,screenRes[1]/2+65))
             screen.blit(icone_Instrucoes,(screenRes[0]/2-500,screenRes[1]/2-10))    
@@ -91,30 +158,30 @@ def controles():
 
 
 def game():
+    pygame.mixer.music.load('AstronGame-main\musicas\Hopeful Feeling.mp3')
+    pygame.mixer.music.play()
+
+    icon_voltar = icon_voltar_n
+
     game = True
 
     while game:
-        
-       for event in pygame.event.get():
+        screen.fill((255,255,255))
+        for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-            screen.fill((255,255,255))
-            pygame.draw.rect(screen,(255,255,0),(90,90,100,100))
             
-            pygame.mixer.music.load('AstronGame-main\musicas\Hopeful Feeling.mp3')
-            pygame.mixer.music.play()
-
             pos = pygame.mouse.get_pos()
 
-           
-            if pos[0] >= 90 and pos[0] <= 190 and pos[1] >= 90 and pos[1] <= 190:
-               pygame.draw.rect(screen,(0,255,0),(90,90,100,100))
-            if event.type == pygame.MOUSEBUTTONDOWN: 
-                if pos >= (90,190) and pos <= (190,90):
+            if pos[0] >= 40 and pos[0] <= 40+icon_voltar.get_width() and pos[1] >= 40 and pos[1] <= icon_voltar.get_height()+40:
+                icon_voltar = icon_voltar_oh
+                if event.type == pygame.MOUSEBUTTONDOWN: 
                     menu()
+            else:
+                icon_voltar = icon_voltar_n
 
-            
+            screen.blit(icon_voltar,(40,40))
             pygame.display.update()
 
 menu()
