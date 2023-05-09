@@ -1,0 +1,197 @@
+import pygame
+from pygame.locals import *
+from sys import exit
+import math
+import random
+from Astron_game import *
+
+pygame.init()
+screenRes =(1152,648)
+screen = pygame.display.set_mode(screenRes, 0 ,32)
+
+clock = pygame.time.Clock()
+
+class Player:
+
+    #Construtor
+    def __init__(self, name, damage):
+        self.name = name
+        self.hp = 5
+        self.stamina = 100
+        self.damage = damage
+        self.positionX = screenRes[0]/2
+        self.positionY = screenRes[1]/2
+        self.alive = True
+    
+    #Metodos
+    def __str__(self):
+        if self.alive:
+            return "Ta vivo"
+        else:
+            return "Foi de comes e bebes"
+
+    def dead(self):
+        self.alive = False
+
+    def hit(self,Enemy):
+        self.hp =- Enemy.damage
+        if self.hp <= 0:
+            self.dead()
+    
+    def atack(self, Enemy):
+        Enemy.hit(self)
+
+    def draw_player(self):
+        pygame.draw.circle(screen,(0,0,0),(self.positionX,self.positionY),10)
+
+    
+
+class Enemy:
+
+    #Construtor
+    def __init__(self, hp, damage):
+        self.size = 10
+        self.hp = hp
+        self.damage = damage
+        self.alive = True
+    
+    #Metodos
+    def dead(self):
+        self.alive = False
+        print("Inimigo morto")
+
+    def hit(self, Player):
+        self.hp -= Player.damage
+        if self.hp <= 0:
+            self.dead()
+    
+    def atack(self, Player):
+        Player.hit(self)
+    
+    def draw(self):
+        pygame.draw.circle(screen,(0,0,0),(random.randint(0,screenRes[0]),random.randint(0,screenRes[1])),10)
+
+class Bullet:
+    def __init__(self, Player):
+        self.size = 3
+        self.speed = 1
+        self.player = Player
+        self.position = (Player.positionX,Player.positionY)
+    
+    def hitE(self, Enemy):
+        Enemy.hp -= self.Player.damage
+
+    def draw(self):
+        pygame.draw.circle(screen,(0,0,0),self.position,10)
+
+def game():
+
+    global MUSIC
+
+    pygame.mixer.music.load('AstronGame-main\musicas\Hopeful Feeling.mp3')
+
+    icon_voltar = icon_voltar_n
+
+    p1 = Player("abc",1)
+    b = Bullet(p1)
+    krebber = Enemy(30,1)
+
+    black = (0, 0, 0)
+    white = (255, 255, 255)
+
+    # Set the font
+    font = pygame.font.Font(None, 30)
+
+    # Define the player
+    player_radius = 20
+    player_position = [screenRes[0]/2, screenRes[1]/2]
+
+    # Define the bullet
+    bullet_size = b.size
+    bullet_speed = b.speed
+    bullet_list = []
+
+    enemy_list = []
+
+    # Set the game loop
+    game_loop = True
+    
+    while game_loop:
+
+        #musica
+        if MUSIC == True:
+            pygame.mixer.music.play()
+        if MUSIC == False:
+            pygame.mixer.music.stop()
+
+        # Clear the screen
+        screen.fill(white)
+
+        # Draw the player
+        p1.draw_player()
+
+        # Draw the bullets
+        for bullet in bullet_list:
+            pygame.draw.circle(screen, black, (bullet[0], bullet[1]), bullet_size)
+
+        # Update the bullet position
+        for bullet in bullet_list:
+            bullet[0] += bullet[2] * bullet_speed
+            bullet[1] += bullet[3] * bullet_speed
+
+        # Remove the bullets that are off the screen
+        for bullet in bullet_list:
+            if bullet[0] < 0 or bullet[0] > screenRes[0] or bullet[1] < 0 or bullet[1] > screenRes[1]:
+                bullet_list.remove(bullet)
+
+        # Check for events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game_loop = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                bullet_position = (p1.positionX,p1.positionY)
+                mouse_position = pygame.mouse.get_pos()
+                bullet_angle = math.atan2(mouse_position[1] - player_position[1], mouse_position[0] - player_position[0])
+                bullet_velocity = [math.cos(bullet_angle), math.sin(bullet_angle)]
+                bullet_list.append([bullet_position[0], bullet_position[1], bullet_velocity[0], bullet_velocity[1]])
+
+        # Move the player with the arrow keys
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a] and p1.positionX > player_radius:
+            p1.positionX -= 5
+        if keys[pygame.K_d] and p1.positionX < screenRes[0] - player_radius:
+            p1.positionX += 5
+        if keys[pygame.K_w] and p1.positionY > player_radius:
+            p1.positionY -= 5
+        if keys[pygame.K_s] and p1.positionY < screenRes[1] - player_radius:
+            p1.positionY += 5
+
+        for enemy in enemy_list:
+            pygame.draw.circle(screen, (0,255,255), (enemy[0], enemy[1]), bullet_size)
+
+        for enemy in enemy_list:
+            for bullet in bullet_list:
+                if bullet[0] + bullet_size >= enemy[0] + krebber.size:
+                    bullet_list.remove(bullet)
+                    enemy_list.remove(enemy)
+
+        #seta voltar
+
+        pos = pygame.mouse.get_pos()
+
+        if pos[0] >= 40 and pos[0] <= 40+icon_voltar.get_width() and pos[1] >= 40 and pos[1] <= icon_voltar.get_height()+40:
+            icon_voltar = icon_voltar_oh
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pygame.mixer.music.load('AstronGame-main\musicas\musicamenu.mp3')
+                menu()
+        else:
+            icon_voltar = icon_voltar_n
+        
+        # Update the screen
+        pygame.display.update()
+
+        # Set the FPS
+        clock = pygame.time.Clock()
+        clock.tick(60)
+
+
