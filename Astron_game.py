@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from sys import exit
+from Astron_game_game import *
 
 pygame.init()
 screenRes =(1152,648)
@@ -49,12 +50,13 @@ icon_voltar_oh = pygame.transform.scale(icon_voltar_oh, (60,40))
 # Musica
 pygame.mixer.music.load('AstronGame-main\musicas\musicamenu.mp3')
 pygame.mixer.music.play()
-music = True
+
+global MUSIC 
+MUSIC = True
 
 def menu():
 
-    
-    music = True
+    global MUSIC 
 
     icone_som = icone_com_som_n
     icon_rank = icon_rank_n
@@ -74,23 +76,23 @@ def menu():
 
             #Som
             if pos[0] >= 1000 and pos[0] <= 1074 and pos[1] >= 550 and pos[1] <= 604:
-                if music == True:
+                if MUSIC == True:
                     icone_som = icone_com_som_oh
-                elif music == False:   
+                elif MUSIC == False:   
                     icone_som = icone_sem_som_oh
                 if event.type == pygame.MOUSEBUTTONDOWN:   
-                    if music == True:
+                    if MUSIC == True:
                         icone_som = icone_sem_som_oh
                         pygame.mixer.music.stop() 
-                        music = False
-                    elif music == False:   
+                        MUSIC = False
+                    elif MUSIC == False:   
                         icone_som = icone_com_som_oh 
                         pygame.mixer.music.play() 
-                        music = True 
+                        MUSIC = True 
             else:
-                if music == True:
+                if MUSIC == True:
                     icone_som = icone_com_som_n
-                elif music == False:   
+                elif MUSIC == False:   
                     icone_som = icone_sem_som_n 
                      
             
@@ -108,7 +110,7 @@ def menu():
             if pos[0] >= 74 and pos[0] <= 74+icon_Iniciar.get_width() and pos[1] >= 235 and pos[1] <= icon_Iniciar.get_height()+235:
                 icon_Iniciar = icon_Iniciar_oh
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    game()  
+                    game()
             else:
                 icon_Iniciar = icon_Iniciar_n
 
@@ -157,7 +159,7 @@ def controles():
         pygame.display.update()
 
 
-def game():
+def gameTS():
     pygame.mixer.music.load('AstronGame-main\musicas\Hopeful Feeling.mp3')
     pygame.mixer.music.play()
 
