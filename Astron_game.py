@@ -7,11 +7,15 @@ pygame.init()
 screenRes =(1152,648)
 screen = pygame.display.set_mode(screenRes, 0 ,32)
 
+
+
+
 # Icones Menu
 instrucoes = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\card_instrucoes.png').convert_alpha()
 instrucoes = pygame.transform.scale(instrucoes, (1300,900))
 
 background = pygame.transform.scale(pygame.image.load("AstronGame-main\Sprites\Icon_Menu\Background_logo.png"), screenRes)
+background_instrus = pygame.transform.scale(pygame.image.load("AstronGame-main\Sprites\Icon_Menu\Background_instrus.png"), screenRes)
 
 icone_sem_som_n = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\musica_off_normal.png').convert_alpha()
 icone_sem_som_n = pygame.transform.scale(icone_sem_som_n, (74,54))
