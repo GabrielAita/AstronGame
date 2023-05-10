@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 from sys import exit
-from Astron_game_game import *
+from Astron_game_game import game
 
 pygame.init()
 screenRes =(1152,648)
@@ -71,6 +71,9 @@ def menu():
     intro = True
 
     while intro:
+        
+        pygame.mouse.set_visible(True)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -114,7 +117,7 @@ def menu():
             if pos[0] >= 74 and pos[0] <= 74+icon_Iniciar.get_width() and pos[1] >= 235 and pos[1] <= icon_Iniciar.get_height()+235:
                 icon_Iniciar = icon_Iniciar_oh
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    game()
+                    game(MUSIC)
             else:
                 icon_Iniciar = icon_Iniciar_n
 
@@ -169,9 +172,9 @@ def gameTS():
 
     icon_voltar = icon_voltar_n
 
-    game = True
+    a = True
 
-    while game:
+    while a:
         screen.fill((255,255,255))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
