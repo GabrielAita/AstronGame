@@ -41,8 +41,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = [posX,posY]
 
         self.name = name
-        self.hp = 5
-        self.stamina = 100
+        self.hp = 3
+        self.stamina = 50
         self.damage = damage
         self.positionX = posX
         self.positionY = posY
@@ -86,29 +86,10 @@ class Player(pygame.sprite.Sprite):
                 self.atual = 0
             self.image = self.sprites_idle[int(self.atual)]
 
-
-
-    def __str__(self):
-        if self.alive:
-            return "Ta vivo"
-        else:
-            return "Foi de comes e bebes"
-
-    def dead(self):
-        self.alive = False
-
-    def hit(self,Enemy):
-        self.hp =- Enemy.damage
-        if self.hp <= 0:
-            self.dead()
-    
-    def atack(self, Enemy):
-        Enemy.hit(self)
-
 class Enemy(pygame.sprite.Sprite):
 
     #Construtor
-    def __init__(self, posX, posY):
+    def __init__(self, posX, posY,speed):
         super().__init__()
         self.sprites_idle = []
         self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img0.png'),(tam_char,tam_char)))
@@ -138,11 +119,13 @@ class Enemy(pygame.sprite.Sprite):
 
         self.hp = 3
         self.damage = 1
-        self.alive = True
+        self.speed = speed
     
     #Metodos
     def update(self):
-        NotImplemented
+        speed = 2
+        self.rect.x += speed * self.speed[0]
+        self.rect.y += speed * self.speed[1]
 
     
 
@@ -165,15 +148,7 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.x = self.position[0]
         self.rect.y = self.position[1]
         self.lifespam -= 1
-        self.image.set_alpha(self.lifespam*5)
-    
-    def hitE(self, Enemy):
-        Enemy.hp -= self.Player.damage
-
-    def draw(self):
-        pygame.draw.circle(screen,(0,0,0),self.position,10)
-
-        
+        self.image.set_alpha(self.lifespam*5) 
 
 class Crosshair(pygame.sprite.Sprite):
     def __init__(self):
@@ -187,3 +162,31 @@ class Crosshair(pygame.sprite.Sprite):
 class Level:
     def __init__(self):
         self.clear = True
+
+class Food(pygame.sprite.Sprite):
+    def __init__(self,posX,posY):
+        super().__init__()
+        self.image = pygame.transform.scale(pygame.image.load("comida.png"),(50,50))
+        self.rect = self.image.get_rect()
+        self.rect.center = [posX,posY]
+
+class Heart(pygame.sprite.Sprite):
+    def __init__(self,Player,posX):
+        super().__init__()
+        self.image = pygame.transform.scale(pygame.image.load('coracao.png').convert_alpha(), (60,60))
+        self.rect = self.image.get_rect()
+        self.rect.center = [posX,30]
+        self.player = Player
+
+class Raio(pygame.sprite.Sprite):
+    def __init__(self,Player,posX,posY):
+        super().__init__()
+        self.image = pygame.transform.scale(pygame.image.load('stamina.png').convert_alpha(), (25,25))
+        self.rect = self.image.get_rect()
+        self.rect.center = [posX,posY]
+        self.player = Player
+
+
+    
+
+
