@@ -7,16 +7,37 @@ import random
 screenRes =(1152,648)
 screen = pygame.display.set_mode(screenRes, 0 ,32)
 
-idle = pygame.image.load('AstronGame-main\Anime\idle\img0.png').convert_alpha()
-idle = pygame.transform.scale(idle, (50,50))
+tam_char = 50
 
 class Player(pygame.sprite.Sprite):
 
     #Construtor
     def __init__(self, name, damage,posX,posY):
         super().__init__()
-        self.image = idle
+        self.sprites_idle = []
+        self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img0.png'),(tam_char,tam_char)))
+        self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img1.png'),(tam_char,tam_char)))
+        self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img2.png'),(tam_char,tam_char)))
+        self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img3.png'),(tam_char,tam_char)))
+        self.sprites_walking_right_down = []
+        self.sprites_walking_right_down.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img0.png'),(tam_char,tam_char)))
+        self.sprites_walking_right_down.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img1.png'),(tam_char,tam_char)))
+        self.sprites_walking_right_down.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img2.png'),(tam_char,tam_char)))
+        self.sprites_walking_right_down.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img3.png'),(tam_char,tam_char)))
+        self.sprites_walking_left = []
+        self.sprites_walking_left.append(pygame.transform.flip(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img0.png'),(tam_char,tam_char)),True,False))
+        self.sprites_walking_left.append(pygame.transform.flip(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img1.png'),(tam_char,tam_char)),True,False))
+        self.sprites_walking_left.append(pygame.transform.flip(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img2.png'),(tam_char,tam_char)),True,False))
+        self.sprites_walking_left.append(pygame.transform.flip(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img3.png'),(tam_char,tam_char)),True,False))
+        self.sprites_walking_up = []
+        self.sprites_walking_up.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_costa\img0.png'),(tam_char,tam_char)))
+        self.sprites_walking_up.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_costa\img1.png'),(tam_char,tam_char)))
+        self.sprites_walking_up.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_costa\img2.png'),(tam_char,tam_char)))
+        self.sprites_walking_up.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_costa\img3.png'),(tam_char,tam_char)))
+        self.atual = 0
+        self.image = self.sprites_idle[self.atual]
         self.rect = self.image.get_rect()
+
         self.rect.center = [posX,posY]
 
         self.name = name
@@ -33,16 +54,39 @@ class Player(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] and self.rect.x > 0:
             self.rect.x -= 5
-            self.positionX -= 5
-        if keys[pygame.K_d] and self.rect.x < screenRes[0] - 50:
+            self.positionX = self.rect.x
+            self.atual = self.atual + 1/10
+            if self.atual >= len(self.sprites_walking_right_down):
+                self.atual = 0
+            self.image = self.sprites_walking_left[int(self.atual)]
+        if keys[pygame.K_d] and self.rect.x < screenRes[0] - tam_char:
             self.rect.x += 5
-            self.positionX += 5
+            self.positionX = self.rect.x
+            self.atual = self.atual + 1/10
+            if self.atual >= len(self.sprites_walking_right_down):
+                self.atual = 0
+            self.image = self.sprites_walking_right_down[int(self.atual)]
         if keys[pygame.K_w] and self.rect.y > 0:
             self.rect.y -= 5
-            self.positionY -= 5
-        if keys[pygame.K_s] and self.rect.y < screenRes[1] - 50:
+            self.positionY = self.rect.y
+            self.atual = self.atual + 1/10
+            if self.atual >= len(self.sprites_walking_up):
+                self.atual = 0
+            self.image = self.sprites_walking_up[int(self.atual)]
+        if keys[pygame.K_s] and self.rect.y < screenRes[1] - tam_char:
             self.rect.y += 5 
-            self.positionY += 5        
+            self.positionY = self.rect.y
+            self.atual = self.atual + 1/10
+            if self.atual >= len(self.sprites_walking_right_down):
+                self.atual = 0
+            self.image = self.sprites_walking_right_down[int(self.atual)]
+        if not keys[pygame.K_a] and not keys[pygame.K_d] and not keys[pygame.K_w] and not keys[pygame.K_s]:
+            self.atual = self.atual + 1/10
+            if self.atual >= len(self.sprites_idle):
+                self.atual = 0
+            self.image = self.sprites_idle[int(self.atual)]
+
+
 
     def __str__(self):
         if self.alive:
@@ -61,57 +105,75 @@ class Player(pygame.sprite.Sprite):
     def atack(self, Enemy):
         Enemy.hit(self)
 
-class Enemy:
+class Enemy(pygame.sprite.Sprite):
 
     #Construtor
-    def __init__(self, hp, damage):
-        self.size = 10
-        self.hp = hp
-        self.damage = damage
+    def __init__(self, posX, posY):
+        super().__init__()
+        self.sprites_idle = []
+        self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img0.png'),(tam_char,tam_char)))
+        self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img1.png'),(tam_char,tam_char)))
+        self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img2.png'),(tam_char,tam_char)))
+        self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img3.png'),(tam_char,tam_char)))
+        self.sprites_walking_right_down = []
+        self.sprites_walking_right_down.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img0.png'),(tam_char,tam_char)))
+        self.sprites_walking_right_down.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img1.png'),(tam_char,tam_char)))
+        self.sprites_walking_right_down.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img2.png'),(tam_char,tam_char)))
+        self.sprites_walking_right_down.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img3.png'),(tam_char,tam_char)))
+        self.sprites_walking_left = []
+        self.sprites_walking_left.append(pygame.transform.flip(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img0.png'),(tam_char,tam_char)),True,False))
+        self.sprites_walking_left.append(pygame.transform.flip(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img1.png'),(tam_char,tam_char)),True,False))
+        self.sprites_walking_left.append(pygame.transform.flip(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img2.png'),(tam_char,tam_char)),True,False))
+        self.sprites_walking_left.append(pygame.transform.flip(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img3.png'),(tam_char,tam_char)),True,False))
+        self.sprites_walking_up = []
+        self.sprites_walking_up.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_costa\img0.png'),(tam_char,tam_char)))
+        self.sprites_walking_up.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_costa\img1.png'),(tam_char,tam_char)))
+        self.sprites_walking_up.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_costa\img2.png'),(tam_char,tam_char)))
+        self.sprites_walking_up.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_costa\img3.png'),(tam_char,tam_char)))
+        self.atual = 0
+        self.image = self.sprites_idle[self.atual]
+        self.rect = self.image.get_rect()
+
+        self.rect.center = [posX,posY]
+
+        self.hp = 3
+        self.damage = 1
         self.alive = True
     
     #Metodos
-    def dead(self):
-        self.alive = False
-        print("Inimigo morto")
+    def update(self):
+        NotImplemented
 
-    def hit(self, Player):
-        self.hp -= Player.damage
-        if self.hp <= 0:
-            self.dead()
     
-    def atack(self, Player):
-        Player.hit(self)
-    
-    def draw(self):
-        pygame.draw.circle(screen,(0,0,0),(random.randint(0,screenRes[0]),random.randint(0,screenRes[1])),10)
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, Player,speed):
         super().__init__()
         self.image = pygame.image.load("AstronGame-main\Sprites\Icon_Game\Bullet.png")
         self.rect = self.image.get_rect()
-        self.rect.center = [Player.positionX,Player.positionY]
+        self.position = [Player.rect.x + 25,Player.rect.y + 25]
+        self.rect.center = self.position
 
+        self.lifespam = 51
         self.size = 3
         self.speed = speed
         self.player = Player
-        self.position = [Player.positionX,Player.positionY]
 
     def update(self):
-        self.position[0] += self.speed[0]
-        self.position[1] += self.speed[1]
+        self.position[0] += self.speed[0] * 8
+        self.position[1] += self.speed[1] * 8
         self.rect.x = self.position[0]
         self.rect.y = self.position[1]
-
-    def fired(self):
-       NotImplemented
+        self.lifespam -= 1
+        self.image.set_alpha(self.lifespam*5)
     
     def hitE(self, Enemy):
         Enemy.hp -= self.Player.damage
 
     def draw(self):
         pygame.draw.circle(screen,(0,0,0),self.position,10)
+
+        
 
 class Crosshair(pygame.sprite.Sprite):
     def __init__(self):
@@ -121,3 +183,7 @@ class Crosshair(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.center = pygame.mouse.get_pos()
+
+class Level:
+    def __init__(self):
+        self.clear = True

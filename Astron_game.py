@@ -165,36 +165,6 @@ def controles():
 
         pygame.display.update()
 
-
-def gameTS():
-    pygame.mixer.music.load('AstronGame-main\musicas\Hopeful Feeling.mp3')
-    pygame.mixer.music.play()
-
-    icon_voltar = icon_voltar_n
-
-    a = True
-
-    while a:
-        screen.fill((255,255,255))
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-            
-            pos = pygame.mouse.get_pos()
-
-            if pos[0] >= 40 and pos[0] <= 40+icon_voltar.get_width() and pos[1] >= 40 and pos[1] <= icon_voltar.get_height()+40:
-                icon_voltar = icon_voltar_oh
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    pygame.mixer.music.load('AstronGame-main\musicas\musicamenu.mp3')
-                    pygame.mixer.music.play() 
-                    menu()
-            else:
-                icon_voltar = icon_voltar_n
-
-            screen.blit(icon_voltar,(40,40))
-            pygame.display.update()
-
 pygame.mixer.music.load('AstronGame-main\musicas\musicamenu.mp3')
 pygame.mixer.music.play()
 menu()
