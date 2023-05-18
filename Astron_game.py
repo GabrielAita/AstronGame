@@ -5,10 +5,7 @@ from Astron_game_game import game
 
 pygame.init()
 screenRes =(1152,648)
-screen = pygame.display.set_mode(screenRes, 0 ,32)
-
-
-
+screen = pygame.display.set_mode(screenRes, pygame.FULLSCREEN)
 
 # Icones Menu
 instrucoes = pygame.image.load('AstronGame-main\Sprites\Icon_Menu\card_instrucoes.png').convert_alpha()

@@ -2,7 +2,8 @@ import pygame
 from pygame.locals import *
 from sys import exit
 import math
-import random
+from random import uniform,random
+vec = pygame.math.Vector2
 
 screenRes =(1152,648)
 screen = pygame.display.set_mode(screenRes, 0 ,32)
@@ -34,6 +35,11 @@ class Player(pygame.sprite.Sprite):
         self.sprites_walking_up.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_costa\img1.png'),(tam_char,tam_char)))
         self.sprites_walking_up.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_costa\img2.png'),(tam_char,tam_char)))
         self.sprites_walking_up.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_costa\img3.png'),(tam_char,tam_char)))
+        self.sprites_damage = []
+        self.sprites_damage.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Dano\img0.png'),(tam_char,tam_char)))
+        self.sprites_damage.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Dano\img1.png'),(tam_char,tam_char)))
+        self.sprites_damage.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Dano\img2.png'),(tam_char,tam_char)))
+        self.sprites_damage.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Dano\img3.png'),(tam_char,tam_char)))
         self.atual = 0
         self.image = self.sprites_idle[self.atual]
         self.rect = self.image.get_rect()
@@ -42,7 +48,7 @@ class Player(pygame.sprite.Sprite):
 
         self.name = name
         self.hp = 3
-        self.stamina = 50
+        self.stamina = 25
         self.damage = damage
         self.positionX = posX
         self.positionY = posY
@@ -85,49 +91,72 @@ class Player(pygame.sprite.Sprite):
             if self.atual >= len(self.sprites_idle):
                 self.atual = 0
             self.image = self.sprites_idle[int(self.atual)]
+    def takingDamage(self):
+        self.atual = self.atual + 1/10
+        if self.atual >= len(self.sprites_damage):
+            self.atual = 0
+        self.image = self.sprites_damage[int(self.atual)]
+
+    def imunityFrame(self,currentHP):
+        self.hp == currentHP
 
 class Enemy(pygame.sprite.Sprite):
 
     #Construtor
-    def __init__(self, posX, posY,speed):
+    def __init__(self, posX, posY,target):
         super().__init__()
         self.sprites_idle = []
         self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img0.png'),(tam_char,tam_char)))
         self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img1.png'),(tam_char,tam_char)))
         self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img2.png'),(tam_char,tam_char)))
         self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img3.png'),(tam_char,tam_char)))
-        self.sprites_walking_right_down = []
-        self.sprites_walking_right_down.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img0.png'),(tam_char,tam_char)))
-        self.sprites_walking_right_down.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img1.png'),(tam_char,tam_char)))
-        self.sprites_walking_right_down.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img2.png'),(tam_char,tam_char)))
-        self.sprites_walking_right_down.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img3.png'),(tam_char,tam_char)))
-        self.sprites_walking_left = []
-        self.sprites_walking_left.append(pygame.transform.flip(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img0.png'),(tam_char,tam_char)),True,False))
-        self.sprites_walking_left.append(pygame.transform.flip(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img1.png'),(tam_char,tam_char)),True,False))
-        self.sprites_walking_left.append(pygame.transform.flip(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img2.png'),(tam_char,tam_char)),True,False))
-        self.sprites_walking_left.append(pygame.transform.flip(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_frente\img3.png'),(tam_char,tam_char)),True,False))
-        self.sprites_walking_up = []
-        self.sprites_walking_up.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_costa\img0.png'),(tam_char,tam_char)))
-        self.sprites_walking_up.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_costa\img1.png'),(tam_char,tam_char)))
-        self.sprites_walking_up.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_costa\img2.png'),(tam_char,tam_char)))
-        self.sprites_walking_up.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\Andando_costa\img3.png'),(tam_char,tam_char)))
         self.atual = 0
         self.image = self.sprites_idle[self.atual]
         self.rect = self.image.get_rect()
 
         self.rect.center = [posX,posY]
 
-        self.hp = 3
+        self.target = [target.positionX,target.positionY]
+        self.hp = 1
         self.damage = 1
-        self.speed = speed
+
+        self.MOB_SIZE = 32
+        self.MAX_SPEED = 5
+        self.MAX_FORCE = 0.1
+        self.APPROACH_RADIUS = 120
+        self.pos = vec(posX,posY)
+        self.vel = vec(self.MAX_SPEED, 0).rotate(uniform(0, 360))
     
     #Metodos
-    def update(self):
-        speed = 2
-        self.rect.x += speed * self.speed[0]
-        self.rect.y += speed * self.speed[1]
 
+    def seek_with_approach(self, target):
+        self.desired = (target - self.pos)
+        dist = self.desired.length()
+        self.desired.normalize_ip()
+        if dist < self.APPROACH_RADIUS:
+            self.desired *= dist / self.APPROACH_RADIUS * self.MAX_SPEED
+        else:
+            self.desired *= self.MAX_SPEED
+        steer = (self.desired - self.vel)
+        if steer.length() > self.MAX_FORCE:
+            steer.scale_to_length(self.MAX_FORCE)
+        return steer
     
+    def update(self):
+        self.acc = self.seek_with_approach((self.target[0],self.target[1]))
+        self.vel += self.acc
+        if self.vel.length() > self.MAX_SPEED:
+            self.vel.scale_to_length(self.MAX_SPEED)
+        self.pos += self.vel
+        self.rect.center = self.pos
+
+        self.atual = self.atual + 1/10
+        if self.atual >= len(self.sprites_idle):
+            self.atual = 0
+        self.image = self.sprites_idle[int(self.atual)]
+
+    def trackingPlayer(self,player):
+        self.target = [player.positionX,player.positionY]
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, Player,speed):
