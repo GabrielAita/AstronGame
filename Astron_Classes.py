@@ -5,10 +5,10 @@ import math
 from random import uniform,random
 vec = pygame.math.Vector2
 
-screenRes =(1152,648)
-screen = pygame.display.set_mode(screenRes, 0 ,32)
+screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
+screenRes = (screen.get_width(),screen.get_height())
 
-tam_char = 50
+tam_char = 70
 
 class Player(pygame.sprite.Sprite):
 
@@ -59,28 +59,28 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] and self.rect.x > 0:
-            self.rect.x -= 5
+            self.rect.x -= 7
             self.positionX = self.rect.x
             self.atual = self.atual + 1/10
             if self.atual >= len(self.sprites_walking_right_down):
                 self.atual = 0
             self.image = self.sprites_walking_left[int(self.atual)]
         if keys[pygame.K_d] and self.rect.x < screenRes[0] - tam_char:
-            self.rect.x += 5
+            self.rect.x += 7
             self.positionX = self.rect.x
             self.atual = self.atual + 1/10
             if self.atual >= len(self.sprites_walking_right_down):
                 self.atual = 0
             self.image = self.sprites_walking_right_down[int(self.atual)]
         if keys[pygame.K_w] and self.rect.y > 0:
-            self.rect.y -= 5
+            self.rect.y -= 7
             self.positionY = self.rect.y
             self.atual = self.atual + 1/10
             if self.atual >= len(self.sprites_walking_up):
                 self.atual = 0
             self.image = self.sprites_walking_up[int(self.atual)]
         if keys[pygame.K_s] and self.rect.y < screenRes[1] - tam_char:
-            self.rect.y += 5 
+            self.rect.y += 7 
             self.positionY = self.rect.y
             self.atual = self.atual + 1/10
             if self.atual >= len(self.sprites_walking_right_down):
@@ -106,10 +106,10 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self, posX, posY,target):
         super().__init__()
         self.sprites_idle = []
-        self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img0.png'),(tam_char,tam_char)))
-        self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img1.png'),(tam_char,tam_char)))
-        self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img2.png'),(tam_char,tam_char)))
-        self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\idle\img3.png'),(tam_char,tam_char)))
+        self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\inimigo\img0.png'),(tam_char,tam_char)))
+        self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\inimigo\img1.png'),(tam_char,tam_char)))
+        self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\inimigo\img2.png'),(tam_char,tam_char)))
+        self.sprites_idle.append(pygame.transform.scale(pygame.image.load('AstronGame-main\Anime\inimigo\img3.png'),(tam_char,tam_char)))
         self.atual = 0
         self.image = self.sprites_idle[self.atual]
         self.rect = self.image.get_rect()
@@ -121,7 +121,7 @@ class Enemy(pygame.sprite.Sprite):
         self.damage = 1
 
         self.MOB_SIZE = 32
-        self.MAX_SPEED = 5
+        self.MAX_SPEED = 8
         self.MAX_FORCE = 0.1
         self.APPROACH_RADIUS = 120
         self.pos = vec(posX,posY)
@@ -195,14 +195,14 @@ class Level:
 class Food(pygame.sprite.Sprite):
     def __init__(self,posX,posY):
         super().__init__()
-        self.image = pygame.transform.scale(pygame.image.load("comida.png"),(50,50))
+        self.image = pygame.transform.scale(pygame.image.load("AstronGame-main\Sprites\Icon_Game\comida.png"),(50,50))
         self.rect = self.image.get_rect()
         self.rect.center = [posX,posY]
 
 class Heart(pygame.sprite.Sprite):
     def __init__(self,Player,posX):
         super().__init__()
-        self.image = pygame.transform.scale(pygame.image.load('coracao.png').convert_alpha(), (60,60))
+        self.image = pygame.transform.scale(pygame.image.load('AstronGame-main\Sprites\Icon_Game\coracao.png').convert_alpha(), (60,60))
         self.rect = self.image.get_rect()
         self.rect.center = [posX,30]
         self.player = Player
@@ -210,7 +210,7 @@ class Heart(pygame.sprite.Sprite):
 class Raio(pygame.sprite.Sprite):
     def __init__(self,Player,posX,posY):
         super().__init__()
-        self.image = pygame.transform.scale(pygame.image.load('stamina.png').convert_alpha(), (25,25))
+        self.image = pygame.transform.scale(pygame.image.load('AstronGame-main\Sprites\Icon_Game\stamina.png').convert_alpha(), (25,25))
         self.rect = self.image.get_rect()
         self.rect.center = [posX,posY]
         self.player = Player

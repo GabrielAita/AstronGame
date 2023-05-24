@@ -4,6 +4,7 @@ from sys import exit
 import math
 import time
 from Astron_Classes import *
+from Astron_game_over import gameover
 import random
 
 
@@ -11,9 +12,13 @@ pygame.init()
 
 clock = pygame.time.Clock()
 
-bg = pygame.transform.scale(pygame.image.load("teste_background.png").convert_alpha(),(1152,648))
+screenRes = (screen.get_width(),screen.get_height())
 
 def game(MUSIC):
+
+    
+
+    bg = pygame.transform.scale(pygame.image.load("teste_background.png").convert_alpha(),screenRes)
 
     p1 = Player("abc",1,screenRes[0]/2,screenRes[1]/2)
     player_group = pygame.sprite.Group()
@@ -37,7 +42,6 @@ def game(MUSIC):
 
     #Level
     lvl = Level()
-    lvl_group = pygame.sprite.Group()
 
     #Comida
     food_group = pygame.sprite.Group()
@@ -62,7 +66,6 @@ def game(MUSIC):
     tempo_inicial = time.time()
 
     score = 0
-    speed = (0,0)
     bg_s = pygame.transform.scale(pygame.image.load("AstronGame-main/Sprites/Numeros/BG_SCORE.png"),(200,150))
     varScore = 0 
 
@@ -80,9 +83,11 @@ def game(MUSIC):
         if p1.stamina == 0:
             game_loop = False
             print("Exausto")
+            gameover(score)
         if p1.hp == 0:
             game_loop = False
             print("Morreu")
+            gameover(score)
 
         # Show score
         numero_string = str(score)
@@ -135,11 +140,11 @@ def game(MUSIC):
                     if temp == 0:
                         position = (random.randint(-200,0),random.randint(224,424))
                     if temp == 1:
-                        position = (random.randint(1152,2352),random.randint(224,424))
+                        position = (random.randint(screenRes[0],screenRes[0]+200),random.randint(224,424))
                     if temp == 2:
                         position = (random.randint(476,676),random.randint(-200,0))
                     if temp == 3:
-                        position = (random.randint(476,676),random.randint(648,848))
+                        position = (random.randint(476,676),random.randint(screenRes[1],screenRes[1]+200))
                     
                     if enemy_killed >= 50:
                         enemy_spawnwed = 10
