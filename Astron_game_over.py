@@ -1,10 +1,7 @@
 import pygame
 from pygame.locals import *
 from sys import exit
-import math
-import time
 from Astron_Classes import *
-import random
 from Astron_image import *
 
 pygame.init()
@@ -90,9 +87,10 @@ def gameover(score):
         if pos[0] >= screenRes[0]/2-CONTINUAR.get_width()/2 and pos[0] <= screenRes[0]/2+CONTINUAR.get_width()/2:
             if pos[1] >= screenRes[1]-200 and pos[1]< screenRes[1]-200 +CONTINUAR.get_height():
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    return(cl1,cl2,cl3,score)
+                    return[cl1,cl2,cl3,score]
+                    
                 
-            
+           
 
         
         screen.blit(seta_cima,(screenRes[0]/2-curretLetra1.get_width()/2-96 - 20 + seta_cima.get_width()/2,screenRes[1]/2)) 

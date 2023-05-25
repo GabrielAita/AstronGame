@@ -2,7 +2,8 @@ import pygame
 from pygame.locals import *
 from sys import exit
 from Astron_game_game import game
-import Astron_game_over
+from Astron_image import alfabeto_mini
+
 
 pygame.init()
 screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
@@ -56,6 +57,8 @@ pygame.mixer.music.play()
 
 global MUSIC 
 MUSIC = True
+global Rank
+Rank = [[2,3,4,100],[9,3,24,1000],[0,0,0,690],[17,16,13,90],[10,23,18,900]]
 
 def menu():
 
@@ -114,7 +117,7 @@ def menu():
             if pos[0] >= 110 and pos[0] <= 110+icon_Iniciar.get_width() and pos[1] >= 350 and pos[1] <= icon_Iniciar.get_height()+350:
                 icon_Iniciar = icon_Iniciar_oh
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    game(MUSIC)
+                    Rank.append(game(MUSIC))
             else:
                 icon_Iniciar = icon_Iniciar_n
 
@@ -163,10 +166,35 @@ def controles():
         pygame.display.update()
 
 def placar():
+    global Rank 
+
+    Rank = ordenar_decrescente(Rank)    
     
     ranks = True
-
+    print(Rank)
     while ranks:
+        pos_y = 100
+
+        screen.blit(background_no_logo,(0,0))  
+        screen.blit(card_rank,(100,50)) 
+
+        for i in range(5):
+            if i - 1 < len(Rank):
+                L_pos_x = 150
+                pos_y += 100
+                N_pos_x = 400
+                numero_string = str(Rank[i][3])
+                digitos_lista = list(numero_string)
+
+                for j in range(len(digitos_lista)):
+                    varScore = int(digitos_lista[j])
+                    screen.blit(pygame.transform.scale(pygame.image.load(f"AstronGame-main/Sprites/Numeros/N{varScore}.png"), (50, 50)), (N_pos_x, pos_y))
+                    N_pos_x += 20
+
+                for h in range(3):
+                    screen.blit(alfabeto_mini[Rank[i][h]], (L_pos_x, pos_y)) 
+                    L_pos_x += 50
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -175,9 +203,16 @@ def placar():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 return
 
-        screen.blit(background_no_logo,(0,0))  
-        screen.blit(card_rank,(100,50))    
+
+          
         pygame.display.update()
+
+def ordenar_decrescente(lista):
+    for i in range(len(lista)-1):
+        for j in range(i+1, len(lista)):
+            if lista[i][3] < lista[j][3]:
+                lista[i], lista[j] = lista[j], lista[i]
+    return lista
 
 pygame.mixer.music.load('AstronGame-main\musicas\musicamenu.mp3')
 pygame.mixer.music.play()

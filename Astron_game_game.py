@@ -23,7 +23,6 @@ def game(MUSIC):
     p1 = Player("abc",1,screenRes[0]/2,screenRes[1]/2)
     player_group = pygame.sprite.Group()
     player_group.add(p1)
-    player_position = [screenRes[0]/2, screenRes[1]/2]
 
     #Crosshair
     crosshair = Crosshair()
@@ -83,11 +82,12 @@ def game(MUSIC):
         if p1.stamina == 0:
             game_loop = False
             print("Exausto")
-            gameover(score)
+            return gameover(score)
+            
         if p1.hp == 0:
             game_loop = False
             print("Morreu")
-            gameover(score)
+            return gameover(score)
 
         # Show score
         numero_string = str(score)
@@ -181,6 +181,8 @@ def game(MUSIC):
 
         # Colisão player/food
         for food in food_group:
+            if tempo_decorrido >= 5:
+                food_group.remove(food)
             for player in player_group:
                 if pygame.sprite.collide_rect(food,player):
                     food_group.remove(food)

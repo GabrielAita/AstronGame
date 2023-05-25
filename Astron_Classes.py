@@ -114,6 +114,8 @@ class Enemy(pygame.sprite.Sprite):
         self.image = self.sprites_idle[self.atual]
         self.rect = self.image.get_rect()
 
+        self.spawn_pos = [posX,posY]
+
         self.rect.center = [posX,posY]
 
         self.target = [target.positionX,target.positionY]
@@ -198,6 +200,7 @@ class Food(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(pygame.image.load("AstronGame-main\Sprites\Icon_Game\comida.png"),(50,50))
         self.rect = self.image.get_rect()
         self.rect.center = [posX,posY]
+        self.timetolive = 5
 
 class Heart(pygame.sprite.Sprite):
     def __init__(self,Player,posX):
