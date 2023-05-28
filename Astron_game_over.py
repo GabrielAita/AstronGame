@@ -10,6 +10,19 @@ clock = pygame.time.Clock()
 
 screenRes = (screen.get_width(),screen.get_height())
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 def gameover(score):
 
     letras1 = alfabeto

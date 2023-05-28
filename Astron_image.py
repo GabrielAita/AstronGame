@@ -5,6 +5,23 @@ pygame.init()
 
 screenRes = (screen.get_width(),screen.get_height())
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 tamLetra = (96,96)
 tamSeta = (64,64)
 
