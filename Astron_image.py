@@ -54,3 +54,5 @@ CONTINUAR = pygame.transform.scale(pygame.image.load('AstronGame-main\Sprites\Ic
 
 
 
+
+

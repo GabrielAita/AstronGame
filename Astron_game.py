@@ -64,6 +64,11 @@ def menu():
 
     global MUSIC 
 
+    if MUSIC:
+        pygame.mixer.music.load('AstronGame-main\musicas\musicamenu.mp3')
+        pygame.mixer.music.set_endevent(pygame.USEREVENT)
+        pygame.mixer.music.play()
+        
     icone_som = icone_com_som_n
     icon_rank = icon_rank_n
     icon_Iniciar = icon_Iniciar_n
@@ -75,6 +80,11 @@ def menu():
     while intro:
         
         pygame.mouse.set_visible(True)
+
+        if MUSIC:
+
+            if pygame.mixer.music.get_busy() == 0:
+                pygame.mixer.music.play()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -118,6 +128,7 @@ def menu():
                 icon_Iniciar = icon_Iniciar_oh
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     Rank.append(game(MUSIC))
+                    menu()
             else:
                 icon_Iniciar = icon_Iniciar_n
 
@@ -214,6 +225,5 @@ def ordenar_decrescente(lista):
                 lista[i], lista[j] = lista[j], lista[i]
     return lista
 
-pygame.mixer.music.load('AstronGame-main\musicas\musicamenu.mp3')
-pygame.mixer.music.play()
+
 menu()

@@ -14,11 +14,15 @@ clock = pygame.time.Clock()
 
 screenRes = (screen.get_width(),screen.get_height())
 
+audio_comendo = pygame.mixer.Sound("AstronGame-main/sonszinhos/comendo 2.wav")
+tiro = pygame.mixer.Sound("AstronGame-main/sonszinhos/tiro.wav")
+bixo_morrendo = pygame.mixer.Sound("AstronGame-main/sonszinhos/bixo morrendo.wav")
+player_damage = pygame.mixer.Sound("AstronGame-main/sonszinhos/prota morrendo.wav")
+
+
 def game(MUSIC):
 
-    
-
-    bg = pygame.transform.scale(pygame.image.load("teste_background.png").convert_alpha(),screenRes)
+    bg = pygame.transform.scale(pygame.image.load("background laboratorio2.png").convert_alpha(),screenRes)
 
     p1 = Player("abc",1,screenRes[0]/2,screenRes[1]/2)
     player_group = pygame.sprite.Group()
@@ -38,7 +42,6 @@ def game(MUSIC):
     enemy_spawnwed = 5
     enemy_killed = 0
 
-
     #Level
     lvl = Level()
 
@@ -48,18 +51,12 @@ def game(MUSIC):
     #Stamina
     stam_group = pygame.sprite.Group()
 
-    y = 130
+    y = 120
     for i in range(25):
-        stam_group.add(Raio(p1, 30+y,30))
+        stam_group.add(Raio(p1, 30+y,80))
         y += 5
 
-    #Vida
-    hp_group = pygame.sprite.Group()
-
-    x = 0
-    for i in range(p1.hp):
-        hp_group.add(Heart(p1, 30+x))
-        x += 35
+    
 
     timer = 0
     tempo_inicial = time.time()
@@ -69,7 +66,8 @@ def game(MUSIC):
     varScore = 0 
 
     if MUSIC:
-        pygame.mixer.music.load('AstronGame-main\musicas\Hopeful Feeling.mp3')
+        pygame.mixer.music.load('AstronGame-main/musicas/Hopeful Feeling.mp3')
+        pygame.mixer.music.set_endevent(pygame.USEREVENT)
         pygame.mixer.music.play()
 
     pygame.mouse.set_visible(False)
@@ -77,6 +75,11 @@ def game(MUSIC):
     game_loop = True
     
     while game_loop:
+        if MUSIC:   
+            if pygame.mixer.music.get_busy() == 0:
+                pygame.mixer.music.play()
+
+        hb=pygame.image.load(f'AstronGame-main/Sprites/barra de vida/barra {p1.hp}.png').convert_alpha()
 
         # End condition
         if p1.stamina == 0:
@@ -92,11 +95,14 @@ def game(MUSIC):
         # Show score
         numero_string = str(score)
         digitos_lista = list(numero_string)
-        pos_x = 960
+        pos_x = screenRes[0]-150
         pos_y = 30
 
+        
+
         screen.blit(bg, (0,0))
-        screen.blit(bg_s,(930,-20))
+        screen.blit(bg_s,(screenRes[0]-200,-20))
+        screen.blit(hb,(10,10))
 
         for i in range(len(digitos_lista)):
             varScore = int(digitos_lista[i])
@@ -127,6 +133,8 @@ def game(MUSIC):
             if event.type == pygame.QUIT:
                 game_loop = False
             if event.type == pygame.MOUSEBUTTONDOWN:
+                if MUSIC:
+                    tiro.play()
                 mouse_position = [crosshair.rect.x,crosshair.rect.y]
                 bullet_angle = math.atan2(mouse_position[1] - p1.positionY, mouse_position[0] - p1.positionX)
                 bullet_velocity = [math.cos(bullet_angle), math.sin(bullet_angle)]
@@ -147,8 +155,8 @@ def game(MUSIC):
                         position = (random.randint(476,676),random.randint(screenRes[1],screenRes[1]+200))
                     
                     if enemy_killed >= 50:
-                        enemy_spawnwed = 10
-                        enemy.MAX_SPEED = 7
+                        enemy_spawnwed = 7
+                        enemy.MAX_SPEED = 8
                         
                     enemy_group.add(Enemy(position[0],position[1],p1))
 
@@ -156,6 +164,8 @@ def game(MUSIC):
         for enemy in enemy_group:
             for bullet in bullet_group:
                 if pygame.sprite.collide_rect(enemy,bullet):
+                    if MUSIC:
+                        bixo_morrendo.play()
                     enemy.hp -= 1
                     if enemy.hp <= 0:
                         enemy_group.remove(enemy)
@@ -170,11 +180,12 @@ def game(MUSIC):
         for enemy in enemy_group:
             for player in player_group:
                     if pygame.sprite.collide_rect(enemy,player):
+                        if MUSIC:
+                            player_damage.play()
                         enemy_group.remove(enemy)
                         player.hp -= 1
                         if player.hp == 0:
                             break
-                        hp_group.remove(hp_group.sprites()[-1])
                         player.takingDamage()
                         if tempo_decorrido >= 1:
                            player.imunityFrame(player.hp)
@@ -185,6 +196,8 @@ def game(MUSIC):
                 food_group.remove(food)
             for player in player_group:
                 if pygame.sprite.collide_rect(food,player):
+                    if MUSIC:
+                        audio_comendo.play()
                     food_group.remove(food)
                     energy_now = player.stamina
                     player.stamina += 10
@@ -193,7 +206,7 @@ def game(MUSIC):
                     while player.stamina - energy_now >=0:
                         if energy_now == 25:
                             break
-                        stam_group.add(Raio(p1, 5+stam_group.sprites()[-1].rect.center[0],30))
+                        stam_group.add(Raio(p1, 5+stam_group.sprites()[-1].rect.center[0],80))
                         energy_now += 1
 
         
@@ -207,11 +220,12 @@ def game(MUSIC):
             enemy.trackingPlayer(p1)
         enemy_group.update()
         food_group.draw(screen)
-        hp_group.draw(screen)
         stam_group.draw(screen)
 
         crosshair_group.draw(screen)
         crosshair_group.update()
+
+        
 
         pygame.display.update()
         
