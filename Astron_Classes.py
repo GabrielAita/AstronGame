@@ -10,14 +10,6 @@ screenRes = (screen.get_width(),screen.get_height())
 
 tam_char = 70
 
-
-
-
-
-
-
-
-
 class Player(pygame.sprite.Sprite):
 
     #Construtor

@@ -5,17 +5,6 @@ from Astron_game_game import game
 from Astron_image import alfabeto_mini
 
 
-
-
-
-
-
-
-
-
-
-
-
 pygame.init()
 screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 screenRes =(screen.get_width(),screen.get_height())

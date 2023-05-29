@@ -5,24 +5,8 @@ pygame.init()
 
 screenRes = (screen.get_width(),screen.get_height())
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 tamLetra = (96,96)
+tamLetra_mini = (64,64)
 tamSeta = (64,64)
 
 # Alfabeto
@@ -57,6 +41,10 @@ Y = pygame.transform.scale(pygame.image.load('AstronGame-main\Sprites\Letras\LY.
 Z = pygame.transform.scale(pygame.image.load('AstronGame-main\Sprites\Letras\LZ.png').convert_alpha(),tamLetra)
 
 alfabeto = [A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z]
+
+alfabeto_mini = []
+for i in range(26):
+    alfabeto_mini.append(pygame.transform.scale(alfabeto[i],tamLetra_mini))
 
 BG_GO = pygame.transform.scale(pygame.image.load('AstronGame-main\Sprites\Icon_GameOver\BG_GAME_OVER.png').convert_alpha(),(screenRes[0]/2,screenRes[1]))
 
