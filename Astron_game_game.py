@@ -47,6 +47,7 @@ def game(MUSIC):
 
     #Comida
     food_group = pygame.sprite.Group()
+    comido = 0
 
     #Stamina
     stam_group = pygame.sprite.Group()
@@ -78,8 +79,8 @@ def game(MUSIC):
         if MUSIC:   
             if pygame.mixer.music.get_busy() == 0:
                 pygame.mixer.music.play()
-
-        hb=pygame.image.load(f'AstronGame-main/Sprites/barra de vida/barra {p1.hp}.png').convert_alpha()
+        if p1.hp > 0:
+            hb=pygame.image.load(f'AstronGame-main/Sprites/barra de vida/barra {p1.hp}.png').convert_alpha()
 
         # End condition
         if p1.stamina == 0:
@@ -154,9 +155,13 @@ def game(MUSIC):
                     if temp == 3:
                         position = (random.randint(476,676),random.randint(screenRes[1],screenRes[1]+200))
                     
-                    if enemy_killed >= 50:
+                    if enemy_killed >= 50 and enemy_killed <= 100:
                         enemy_spawnwed = 7
                         enemy.MAX_SPEED = 8
+                    
+                    elif enemy_killed >= 100:
+                        enemy_spawnwed = 10
+                        enemy.MAX_SPEED = 12
                         
                     enemy_group.add(Enemy(position[0],position[1],p1))
 
@@ -201,6 +206,7 @@ def game(MUSIC):
                     food_group.remove(food)
                     energy_now = player.stamina
                     player.stamina += 10
+                    comido += 1
                     if player.stamina >= 25:
                         player.stamina = 25
                     while player.stamina - energy_now >=0:
@@ -208,6 +214,14 @@ def game(MUSIC):
                             break
                         stam_group.add(Raio(p1, 5+stam_group.sprites()[-1].rect.center[0],80))
                         energy_now += 1
+                    if comido == 15:
+                        if p1.hp == 4:
+                            comido = 0
+                            break
+                        else:
+                            p1.hp += 1
+                            comido = 0
+                    
 
         
         # Update the screen

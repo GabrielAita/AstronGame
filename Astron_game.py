@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 from sys import exit
 from Astron_game_game import game
-from Astron_image import alfabeto_mini
+from Astron_image import alfabeto_mini, TELA_LOADING_1
 
 
 pygame.init()
@@ -59,6 +59,8 @@ global MUSIC
 MUSIC = True
 global Rank
 Rank = [[2,3,4,100],[9,3,24,1000],[0,0,0,690],[17,16,13,90],[10,23,18,900]]
+
+clock = pygame.time.Clock()
 
 def menu():
 
@@ -127,6 +129,7 @@ def menu():
             if pos[0] >= 110 and pos[0] <= 110+icon_Iniciar.get_width() and pos[1] >= 350 and pos[1] <= icon_Iniciar.get_height()+350:
                 icon_Iniciar = icon_Iniciar_oh
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    loading()
                     Rank.append(game(MUSIC))
                     menu()
             else:
@@ -224,6 +227,23 @@ def ordenar_decrescente(lista):
             if lista[i][3] < lista[j][3]:
                 lista[i], lista[j] = lista[j], lista[i]
     return lista
+
+def loading():
+
+    time = 0
+
+    load = True
+
+    while load:
+        screen.fill((0,0,0))
+        screen.blit(TELA_LOADING_1,(0,0))
+        time += 1
+
+        if time >= 600:
+            load = False
+
+        clock.tick(60)
+        pygame.display.update()
 
 
 menu()

@@ -50,6 +50,8 @@ BG_GO = pygame.transform.scale(pygame.image.load('AstronGame-main\Sprites\Icon_G
 
 CONTINUAR = pygame.transform.scale(pygame.image.load('AstronGame-main\Sprites\Icon_GameOver\CONTINUAR.png').convert_alpha(),(256,128))
 
+TELA_LOADING_1 = pygame.transform.scale(pygame.image.load('AstronGame-main/texto instruções/sobreviver.png').convert_alpha(),screenRes)
+
 
 
 
